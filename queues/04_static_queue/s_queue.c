@@ -6,7 +6,7 @@
 struct s_queue{
     int vec[MAX_TAM];
     int inicio;
-    int tam;
+    int n;
 };
 
 S_Queue* sq_create(){
@@ -14,7 +14,7 @@ S_Queue* sq_create(){
     if(!sq)
         return NULL;
     sq->inicio = 0;
-    sq->tam = 0;
+    sq->n = 0;
     return sq;
 }
 
@@ -28,17 +28,26 @@ void sq_free(S_Queue** psq){
 int sq_is_empty(S_Queue* sq){
     if(!sq)
         return -1;
-    return (sq->tam == 0);
+    return (sq->n == 0);
 }
 
 int sq_insert(S_Queue* sq, int info){
     if(!sq)
         return -1;
-    
+    if(sq->n == MAX_TAM)
+        return 0;
+    int i = (sq->n + sq->inicio) % MAX_TAM;
+    sq->vec[i] = info;
+    sq->n++;
 }
 
 int sq_remove(S_Queue* sq, int* ret){
     if (!sq)
         return -1;
-    
+    if(sq->n == 0)
+        return 0;
+    *ret = sq->vec[sq->inicio];
+    sq->inicio = (sq->inicio + 1) % MAX_TAM;
+    sq->n--;
+    return 1;
 }
